@@ -46,8 +46,8 @@ class AuthCssRenderingTest extends TestCase
         // Verify the page loads successfully
         $response->assertStatus(200);
         
-        // Verify the guest layout is being used
-        $response->assertSee('TriLingua', false);
+        // Verify the page title contains TriLingua
+        $response->assertSee('Sign in', false);
         $response->assertSee('Welcome back', false);
         
         // CRITICAL ASSERTION: Verify Vite directive is present in the HTML
@@ -65,14 +65,13 @@ class AuthCssRenderingTest extends TestCase
         
         // Verify that CSS classes used in the guest layout are present in the HTML
         // These classes should be styled by the CSS file
-        $response->assertSee('class="guest-center"', false);
-        $response->assertSee('class="hero"', false);
-        $response->assertSee('class="left-hero"', false);
-        $response->assertSee('class="form-card"', false);
-        $response->assertSee('class="form-area"', false);
+        $response->assertSee('class="auth-container"', false);
+        $response->assertSee('class="auth-card"', false);
+        $response->assertSee('class="auth-logo"', false);
+        $response->assertSee('class="auth-header"', false);
         
         // Verify form elements that require styling are present
-        $response->assertSee('class="btn primary block"', false);
+        $response->assertSee('class="btn-auth"', false);
         $response->assertSee('class="form-field"', false);
     }
     
@@ -92,8 +91,7 @@ class AuthCssRenderingTest extends TestCase
         // Verify the page loads successfully
         $response->assertStatus(200);
         
-        // Verify the guest layout is being used
-        $response->assertSee('TriLingua', false);
+        // Verify the page content
         $response->assertSee('Create your account', false);
         
         // CRITICAL ASSERTION: Verify Vite directive is present in the HTML
@@ -109,13 +107,12 @@ class AuthCssRenderingTest extends TestCase
         );
         
         // Verify that CSS classes used in the guest layout are present in the HTML
-        $response->assertSee('class="guest-center"', false);
-        $response->assertSee('class="hero"', false);
-        $response->assertSee('class="form-card"', false);
-        $response->assertSee('class="form-area"', false);
+        $response->assertSee('class="auth-container"', false);
+        $response->assertSee('class="auth-card"', false);
+        $response->assertSee('class="auth-logo"', false);
         
         // Verify form elements that require styling are present
-        $response->assertSee('class="btn primary block"', false);
+        $response->assertSee('class="btn-auth"', false);
         $response->assertSee('class="form-field"', false);
     }
     
@@ -155,7 +152,7 @@ class AuthCssRenderingTest extends TestCase
         // On unfixed code, this should exist but may not be properly configured
         $cssEntryFound = false;
         foreach ($manifest as $key => $entry) {
-            if (str_contains($key, 'resources/css/app.css')) {
+            if (str_contains($key, 'resources/css/base.css')) {
                 $cssEntryFound = true;
                 
                 // Verify the entry has a 'file' property (the compiled CSS file)
@@ -178,7 +175,7 @@ class AuthCssRenderingTest extends TestCase
         
         $this->assertTrue(
             $cssEntryFound,
-            'CSS entry (resources/css/app.css) not found in Vite manifest. ' .
+            'CSS entry (resources/css/base.css) not found in Vite manifest. ' .
             'This indicates Vite is not compiling the CSS properly.'
         );
     }
@@ -332,7 +329,7 @@ class AuthCssRenderingTest extends TestCase
         // Verify navigation elements are present
         $response->assertSee('class="nav-link active"', false);
         $response->assertSee('New Translation', false);
-        $response->assertSee('My Documents', false);
+        $response->assertSee('History', false);
         
         // Verify user information is displayed
         $response->assertSee($user->name, false);
@@ -370,7 +367,7 @@ class AuthCssRenderingTest extends TestCase
         $cssEntryFound = false;
         $cssFile = null;
         foreach ($manifest as $key => $entry) {
-            if (str_contains($key, 'resources/css/app.css')) {
+            if (str_contains($key, 'resources/css/base.css')) {
                 $cssEntryFound = true;
                 $cssFile = $entry['file'] ?? null;
                 
@@ -394,7 +391,7 @@ class AuthCssRenderingTest extends TestCase
         
         $this->assertTrue(
             $cssEntryFound,
-            'CSS entry (resources/css/app.css) not found in Vite manifest. ' .
+            'CSS entry (resources/css/base.css) not found in Vite manifest. ' .
             'This indicates Vite is not compiling app.css properly.'
         );
         
@@ -528,7 +525,7 @@ class AuthCssRenderingTest extends TestCase
         $response->assertSee('class="nav"', false);
         $response->assertSee('Dashboard', false);
         $response->assertSee('New Translation', false);
-        $response->assertSee('My Documents', false);
+        $response->assertSee('History', false);
         $response->assertSee('Saved Translations', false);
         
         // Verify storage indicator

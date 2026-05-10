@@ -13,6 +13,9 @@ export default defineConfig({
                 'resources/css/views/auth/register.css',
                 'resources/css/views/dashboard.css',
                 'resources/css/views/settings.css',
+                'resources/css/views/history.css',
+                'resources/css/views/translation.css',
+                'resources/css/views/welcome.css',
                 'resources/js/app.js'
             ],
             refresh: true,

@@ -32,5 +32,9 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="SUPABASE_URL" value="https://test.supabase.co"/>
+        <env name="SUPABASE_ANON_KEY" value="test-anon-key"/>
+        <env name="SUPABASE_SERVICE_ROLE_KEY" value="test-service-role-key"/>
+        <env name="SUPABASE_BUCKET" value="test-bucket"/>
     </php>
 </phpunit>

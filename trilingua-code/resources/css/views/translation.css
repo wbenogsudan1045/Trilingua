@@ -1,0 +1,214 @@
+/* Translation view-specific stylesheet */
+/* Uses only CSS custom properties defined in base.css */
+
+/* ---- Layout ---- */
+.translation-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* ---- Panel ---- */
+.translation-panel {
+    flex: 1;
+    min-width: 280px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+/* ---- Panel Header ---- */
+.translation-panel__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.translation-panel__header select {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+}
+
+.translation-panel__header select:focus {
+    outline: none;
+    border-color: var(--muted);
+}
+
+/* ---- Swap Button ---- */
+.translation-swap {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: color 0.15s, background 0.15s;
+}
+
+.translation-swap:hover {
+    color: var(--text);
+    background: var(--border);
+}
+
+/* ---- Panel Body ---- */
+.translation-panel__body {
+    display: flex;
+    flex-direction: column;
+}
+
+.translation-panel__body textarea {
+    width: 100%;
+    resize: none;
+    min-height: 240px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    padding: 16px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    font-family: inherit;
+    line-height: 1.6;
+}
+
+.translation-panel__body textarea:focus {
+    outline: none;
+}
+
+.translation-panel__body textarea::placeholder {
+    color: var(--muted);
+}
+
+/* Output text display area */
+#output-text {
+    min-height: 240px;
+    padding: 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* File info row (shown when a file is attached) */
+.translation-panel__file-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+    color: var(--text);
+}
+
+#file-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#remove-file {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+
+#remove-file:hover {
+    color: var(--accent);
+}
+
+/* Download area */
+#output-download {
+    padding: 16px;
+}
+
+#download-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+#download-link:hover {
+    text-decoration: underline;
+}
+
+/* ---- Panel Footer ---- */
+.translation-panel__footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+}
+
+/* ---- Character Counter ---- */
+#char-counter {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-left: auto;
+}
+
+.counter-warning {
+    color: var(--accent);
+}
+
+/* ---- Inline Error Area ---- */
+.translation-panel__error {
+    padding: 0 16px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    min-height: 0;
+}
+
+.translation-panel__error:not(:empty) {
+    padding: 8px 16px;
+}
+
+/* ---- Actions Row ---- */
+.translation-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+/* ---- Disabled Button State ---- */
+button[aria-disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .translation-layout {
+        flex-direction: column;
+    }
+
+    .translation-panel {
+        min-width: 0;
+        width: 100%;
+    }
+}

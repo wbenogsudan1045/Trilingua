@@ -1,0 +1,30 @@
+/* History view-specific stylesheet */
+
+/* Stack layout */
+.stack > * + * { margin-top: 24px; }
+
+/* Table card */
+.table-card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04); }
+.card-title  { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+/* Table styles */
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 10px 8px; border-bottom: 1px solid var(--border); text-align: left; }
+.table tr.border-top td { border-top: 1px solid var(--border); }
+
+/* Empty state */
+.empty-state { color: var(--muted); font-size: 0.95rem; margin-top: 8px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table th, .table td { padding: 8px 4px; font-size: 0.85rem; }
+}
+
+/* Type badges */
+.type-badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.72rem; font-weight:600; text-transform:uppercase; }
+.type-badge--doc  { background:#e0f0ff; color:#1a6fb5; }
+.type-badge--text { background:#e8f5e9; color:#2e7d32; }
+
+/* Content cell */
+.content-cell { max-width:220px; overflow:hidden; }
+.text-preview { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px; font-size:0.88rem; color:var(--text); }
