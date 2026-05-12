@@ -9,6 +9,7 @@ use App\Services\TranslationService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
@@ -68,7 +69,7 @@ class TranslationController extends Controller
                     $pdfColumnMode
                 );
 
-                $storagePath = session()->getId() . '/' . basename($outputPath);
+                $storagePath = Auth::id() . '/' . basename($outputPath);
 
                 try {
                     $storageResult = $this->storage->uploadFile($outputPath, $storagePath);
@@ -92,7 +93,7 @@ class TranslationController extends Controller
 
                 try {
                     $this->history->insertRecord([
-                        'session_id'            => session()->getId(),
+                        'user_id'               => Auth::id(),
                         'original_filename'     => $request->file('document')->getClientOriginalName(),
                         'translated_filename'   => $downloadFilename,
                         'source_language'       => $sourceLang,
@@ -104,7 +105,7 @@ class TranslationController extends Controller
                 } catch (\Throwable $e) {
                     Log::error('Failed to insert translation history record', [
                         'exception'    => $e->getMessage(),
-                        'session_id'   => session()->getId(),
+                        'user_id'      => Auth::id(),
                         'storage_path' => $storagePath,
                     ]);
                 }
@@ -126,7 +127,7 @@ class TranslationController extends Controller
             // Log text translation to history (non-blocking)
             try {
                 $this->history->insertRecord([
-                    'session_id'       => session()->getId(),
+                    'user_id'          => Auth::id(),
                     'translation_type' => 'text',
                     'source_text'      => $request->input('text'),
                     'translated_text'  => $result,
@@ -137,7 +138,7 @@ class TranslationController extends Controller
             } catch (\Throwable $e) {
                 Log::error('Failed to insert text translation history record', [
                     'exception'  => $e->getMessage(),
-                    'session_id' => session()->getId(),
+                    'user_id'    => Auth::id(),
                 ]);
             }
 

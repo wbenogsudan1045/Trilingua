@@ -212,3 +212,28 @@ button[aria-disabled="true"] {
         width: 100%;
     }
 }
+
+/* ---- Speaker Button ---- */
+.speak-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: color 0.15s, background 0.15s;
+}
+
+.speak-btn:hover {
+    color: var(--primary);
+    background: var(--border);
+}
+
+.speak-btn svg {
+    width: 18px;
+    height: 18px;
+}

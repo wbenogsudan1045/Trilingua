@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class HistoryController extends Controller
@@ -27,7 +28,7 @@ class HistoryController extends Controller
     public function index(Request $request): View
     {
         try {
-            $records = $this->history->getHistory(session()->getId());
+            $records = $this->history->getHistory(Auth::id());
 
             return view('history', [
                 'records' => $records,
@@ -35,7 +36,7 @@ class HistoryController extends Controller
             ]);
         } catch (\Throwable $e) {
             Log::error('HistoryController::index failed to load history', [
-                'session_id' => session()->getId(),
+                'user_id'   => Auth::id(),
                 'exception'  => $e->getMessage(),
             ]);
 
@@ -76,8 +77,8 @@ class HistoryController extends Controller
             );
         }
 
-        // 2. Enforce session ownership — return 403 without revealing record existence
-        if ($record['session_id'] !== session()->getId()) {
+        // 2. Enforce user ownership — return 403 without revealing record existence
+        if ((int) $record['user_id'] !== Auth::id()) {
             return response()->json(
                 ['error' => 'Forbidden.'],
                 403

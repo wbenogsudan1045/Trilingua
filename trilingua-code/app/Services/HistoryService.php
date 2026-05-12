@@ -14,11 +14,11 @@ class HistoryService
      * Insert a new translation job record into translation_history.
      *
      * For document translations, pass:
-     *   session_id, translation_type='document', original_filename, translated_filename,
+     *   user_id, translation_type='document', original_filename, translated_filename,
      *   source_language, target_language, created_at, storage_path, signed_url_expires_at
      *
      * For text translations, pass:
-     *   session_id, translation_type='text', source_text, translated_text,
+     *   user_id, translation_type='text', source_text, translated_text,
      *   source_language, target_language, created_at
      *
      * @throws RuntimeException on DB error or connection failure.
@@ -30,7 +30,7 @@ class HistoryService
 
         // Build payload — only include keys that are present
         $payload = array_filter([
-            'session_id'            => $data['session_id'] ?? null,
+            'user_id'               => $data['user_id'] ?? null,
             'translation_type'      => $data['translation_type'] ?? 'document',
             'original_filename'     => $data['original_filename'] ?? null,
             'translated_filename'   => $data['translated_filename'] ?? null,
@@ -70,12 +70,13 @@ class HistoryService
     }
 
     /**
-     * Fetch history records for a session, newest first, capped at 200.
+     * Fetch history records for a user, newest first, capped at 200.
      *
+     * @param  int  $userId  The authenticated user's ID.
      * @return array<int, array>  Each element is a translation_history row.
      * @throws RuntimeException on DB error or connection failure.
      */
-    public function getHistory(string $sessionId): array
+    public function getHistory(int $userId): array
     {
         $url     = config('services.supabase.url');
         $anonKey = config('services.supabase.anon_key');
@@ -88,10 +89,10 @@ class HistoryService
                     'Content-Type'  => 'application/json',
                 ],
                 'query' => [
-                    'session_id' => "eq.{$sessionId}",
-                    'order'      => 'created_at.desc',
-                    'limit'      => '200',
-                    'select'     => 'id,translation_type,original_filename,translated_filename,source_language,target_language,created_at,storage_path,signed_url_expires_at,source_text,translated_text',
+                    'user_id' => "eq.{$userId}",
+                    'order'   => 'created_at.desc',
+                    'limit'   => '200',
+                    'select'  => 'id,user_id,translation_type,original_filename,translated_filename,source_language,target_language,created_at,storage_path,signed_url_expires_at,source_text,translated_text',
                 ],
             ]);
         } catch (ConnectException $e) {

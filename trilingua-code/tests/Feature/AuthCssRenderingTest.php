@@ -329,7 +329,7 @@ class AuthCssRenderingTest extends TestCase
         // Verify navigation elements are present
         $response->assertSee('class="nav-link active"', false);
         $response->assertSee('New Translation', false);
-        $response->assertSee('History', false);
+        $response->assertSee('Saved Translations', false);
         
         // Verify user information is displayed
         $response->assertSee($user->name, false);
@@ -525,7 +525,6 @@ class AuthCssRenderingTest extends TestCase
         $response->assertSee('class="nav"', false);
         $response->assertSee('Dashboard', false);
         $response->assertSee('New Translation', false);
-        $response->assertSee('History', false);
         $response->assertSee('Saved Translations', false);
         
         // Verify storage indicator

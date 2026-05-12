@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TranslationController;
 
 Route::get('/', function () {
@@ -33,9 +35,7 @@ Route::post('/logout', [LoginController::class, 'logout'])
 
 // Protected routes
 Route::middleware(['auth', 'throttle:60,1'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/settings', [SettingsController::class, 'show'])->name('settings');
     Route::post('/settings/account', [SettingsController::class, 'updateAccount'])->name('settings.account');
@@ -45,6 +45,8 @@ Route::middleware(['auth', 'throttle:60,1'])->group(function () {
     Route::get('/translate', [TranslationController::class, 'show'])->name('translate');
     Route::post('/translate', [TranslationController::class, 'translate'])->name('translate.submit');
     Route::get('/translate/download/{token}', [TranslationController::class, 'download'])->name('translate.download');
+
+    Route::get('/documents', [DocumentsController::class, 'index'])->name('documents');
 
     Route::get('/history', [HistoryController::class, 'index'])->name('history');
     Route::post('/history/redownload/{id}', [HistoryController::class, 'redownload'])->name('history.redownload');

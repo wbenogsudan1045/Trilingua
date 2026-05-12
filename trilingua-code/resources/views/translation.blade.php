@@ -28,12 +28,19 @@
             </select>
         </div>
         <div class="translation-panel__body">
-            <textarea id="source-text" maxlength="8000" placeholder="Enter text to translate..."></textarea>
+            <textarea id="source-text" maxlength="5000" placeholder="Enter text to translate..."></textarea>
             <div class="translation-panel__file-info" style="display:none">
                 <span id="file-name"></span>
                 <button id="remove-file" type="button">Remove</button>
             </div>
             <div class="translation-panel__footer">
+                <button id="speak-source-btn" type="button" class="speak-btn" aria-label="Read source text aloud">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    </svg>
+                </button>
                 <button id="attach-btn" type="button">Attach file</button>
                 <input id="file-input" type="file" hidden accept=".docx,.pdf,.txt,.md,.rtf,.odt,.csv">
                 <select id="pdf-column-mode" style="display:none">
@@ -42,7 +49,7 @@
                     <option value="left">Left column only</option>
                     <option value="right">Right column only</option>
                 </select>
-                <span id="char-counter">0/8000</span>
+                <span id="char-counter">0/5000</span>
             </div>
         </div>
         <div class="translation-panel__error"></div>
@@ -58,6 +65,13 @@
             </div>
         </div>
         <div class="translation-panel__footer">
+            <button id="speak-output-btn" type="button" class="speak-btn" aria-label="Read translation aloud">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+            </button>
             <button id="copy-btn" type="button" aria-disabled="true">Copy</button>
             <button id="save-btn" type="button" aria-disabled="true">Save</button>
         </div>
@@ -106,8 +120,8 @@
 
     // ─── Task 12.1 — Character counter and paste-truncation ──────────────────
 
-    var MAX_CHARS = 8000;
-    var WARN_THRESHOLD = 7500;
+    var MAX_CHARS = 5000;
+    var WARN_THRESHOLD = 4500;
 
     function updateCounter() {
         var len = sourceText.value.length;
@@ -398,6 +412,39 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     });
+
+    // ─── Speaker buttons (Text-to-Speech) ────────────────────────────────────
+    // Hide buttons if the Web Speech API is unavailable in this browser.
+
+    var speakSourceBtn = document.getElementById('speak-source-btn');
+    var speakOutputBtn = document.getElementById('speak-output-btn');
+
+    if (!window.speechSynthesis) {
+        if (speakSourceBtn) { speakSourceBtn.style.display = 'none'; }
+        if (speakOutputBtn) { speakOutputBtn.style.display = 'none'; }
+    } else {
+        speakSourceBtn.addEventListener('click', function () {
+            window.speechSynthesis.cancel();
+            var text = sourceText.value.trim();
+            if (!text) { return; }
+            var utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = sourceLang.value === 'English' ? 'en-US'
+                           : sourceLang.value === 'Filipino' ? 'fil-PH'
+                           : 'ceb'; // Cebuano
+            window.speechSynthesis.speak(utterance);
+        });
+
+        speakOutputBtn.addEventListener('click', function () {
+            window.speechSynthesis.cancel();
+            var text = outputText.textContent.trim();
+            if (!text) { return; }
+            var utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = targetLang.value === 'English' ? 'en-US'
+                           : targetLang.value === 'Filipino' ? 'fil-PH'
+                           : 'ceb'; // Cebuano
+            window.speechSynthesis.speak(utterance);
+        });
+    }
 
 })();
 </script>

@@ -28,3 +28,206 @@
 /* Content cell */
 .content-cell { max-width:220px; overflow:hidden; }
 .text-preview { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px; font-size:0.88rem; color:var(--text); }
+
+/* ── History page header ─────────────────────────────────────────────────── */
+.history-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 0 8px;
+}
+
+.history-page-header__title h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-page-header__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+/* ── Count badge ─────────────────────────────────────────────────────────── */
+.count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary, #3b82f6);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    min-width: 22px;
+    line-height: 1.4;
+}
+
+/* ── Search & select controls ────────────────────────────────────────────── */
+.history-search {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 0.875rem;
+    min-width: 180px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.history-search:focus { border-color: var(--primary, #3b82f6); }
+
+.history-select {
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 0.875rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+}
+.history-select:focus { border-color: var(--primary, #3b82f6); }
+
+/* ── Group section ───────────────────────────────────────────────────────── */
+.history-group {
+    margin-bottom: 28px;
+}
+
+.history-group__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Card grid ───────────────────────────────────────────────────────────── */
+.history-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+/* ── Individual history card ─────────────────────────────────────────────── */
+.history-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+.history-card:hover {
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+    transform: translateY(-1px);
+}
+
+.history-card__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-card__body {
+    flex: 1;
+}
+
+.history-card__preview {
+    font-size: 0.9rem;
+    color: var(--text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-card__sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin: 4px 0 0;
+}
+
+.history-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 2px;
+}
+
+.history-card__date {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* ── Match badge ─────────────────────────────────────────────────────────── */
+.match-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary, #3b82f6);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    min-width: 38px;
+}
+
+/* ── Action icon row ─────────────────────────────────────────────────────── */
+.history-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.history-card__action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    padding: 0;
+}
+.history-card__action-btn:hover {
+    background: var(--bg, #f1f5f9);
+    color: var(--primary, #3b82f6);
+}
+.history-card__action-btn.bookmark-btn--active {
+    color: var(--primary, #3b82f6);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .history-page-header { flex-direction: column; align-items: flex-start; }
+    .history-page-header__controls { margin-left: 0; width: 100%; }
+    .history-search { min-width: 0; width: 100%; }
+    .history-select { width: 100%; }
+    .history-cards { grid-template-columns: 1fr; }
+}
