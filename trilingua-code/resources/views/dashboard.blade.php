@@ -45,10 +45,6 @@
                 <span class="quick-action-card__icon">&#8679;</span>
                 <span class="quick-action-card__label">Upload Document</span>
             </a>
-            <a href="#" class="quick-action-card">
-                <span class="quick-action-card__icon">&#128218;</span>
-                <span class="quick-action-card__label">Browse Corpus</span>
-            </a>
         </div>
 
         {{-- Recent Translations table --}}
@@ -62,12 +58,11 @@
                             <th>Languages</th>
                             <th>Date</th>
                             <th>Status</th>
-                            <th>Confidence</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($recentRecords as $record)
-                            <tr class="border-top">
+                            <tr class="border-top" style="cursor:pointer" onclick="window.location='{{ route('history') }}'">
                                 <td>
                                     @if (($record['translation_type'] ?? 'document') === 'document')
                                         {{ $record['original_filename'] ?? 'Untitled Document' }}
@@ -88,11 +83,10 @@
                                         <span class="recent-table__status recent-table__status--text">Text</span>
                                     @endif
                                 </td>
-                                <td>—</td>
                             </tr>
                         @empty
                             <tr class="border-top">
-                                <td colspan="5" style="text-align:center;color:var(--muted);padding:24px 0">
+                                <td colspan="4" style="text-align:center;color:var(--muted);padding:24px 0">
                                     No recent translations
                                 </td>
                             </tr>

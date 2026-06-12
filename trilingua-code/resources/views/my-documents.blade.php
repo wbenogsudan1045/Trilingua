@@ -105,8 +105,9 @@
                 @php
                     $isTranslated = !empty($doc['original_filename']) && !empty($doc['translated_filename']);
                     // Determine the display name and language badge
-                    $displayName  = $doc['translated_filename'] ?? $doc['original_filename'] ?? 'Untitled';
-                    $langLabel    = $doc['source_language'] ?? '—';
+                    $displayName    = $doc['translated_filename'] ?? $doc['original_filename'] ?? 'Untitled';
+                    $langLabel      = $doc['source_language'] ?? '—';
+                    $directionLabel = ($doc['source_language'] ?? '—') . ' → ' . ($doc['target_language'] ?? '—');
                     // Pick a colour for the language badge based on language
                     $langColors   = [
                         'Cebuano'  => 'badge--cebuano',
@@ -128,9 +129,9 @@
                     <div class="doc-card__accent doc-card__accent--{{ strtolower($langLabel) }}"></div>
 
                     <div class="doc-card__body">
-                        {{-- Language badge + word count row --}}
+                        {{-- Language direction label row --}}
                         <div class="doc-card__meta-row">
-                            <span class="lang-badge {{ $langClass }}">{{ $langLabel }}</span>
+                            <span class="lang-badge {{ $langClass }}">{{ $directionLabel }}</span>
                         </div>
 
                         {{-- Document title --}}
@@ -146,12 +147,6 @@
                             @else
                                 <span class="type-pill type-pill--original">Original</span>
                             @endif
-                        </div>
-
-                        {{-- Target language tags --}}
-                        <div class="doc-card__targets">
-                            <span class="doc-card__targets-label">Target:</span>
-                            <span class="target-tag">{{ $doc['target_language'] ?? '—' }}</span>
                         </div>
 
                         {{-- Translation progress bar --}}
@@ -175,6 +170,14 @@
                                     data-filename="{{ $doc['translated_filename'] ?? $doc['original_filename'] }}">
                                 Open
                             </button>
+                            @if (!empty($doc['original_storage_path']))
+                            <button class="doc-action-link redownload-btn redownload-btn--original"
+                                    data-id="{{ $doc['id'] }}"
+                                    data-type="original"
+                                    data-filename="{{ $doc['original_filename'] ?? 'original' }}">
+                                Original
+                            </button>
+                            @endif
                             <button class="doc-card__more" aria-label="More options">&#8943;</button>
                         </div>
                     </div>

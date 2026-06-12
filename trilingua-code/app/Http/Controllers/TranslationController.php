@@ -62,8 +62,29 @@ class TranslationController extends Controller
         try {
             // Document mode — upload to Supabase Storage, return a signed URL
             if ($request->hasFile('document')) {
+                // Capture original file details BEFORE translateDocument() consumes the temp file
+                $uploadedFile       = $request->file('document');
+                $originalTempPath   = $uploadedFile->getRealPath();
+                $originalClientName = $uploadedFile->getClientOriginalName();
+                $originalStoragePath = Auth::id() . '/originals/' . basename($originalTempPath)
+                    . '_original.' . $uploadedFile->getClientOriginalExtension();
+
+                // Upload the original file to Supabase Storage (non-blocking — failure must not abort the response)
+                $originalStorageResult = null;
+                try {
+                    $originalStorageResult = $this->storage->uploadFile(
+                        $originalTempPath,
+                        $originalStoragePath
+                    );
+                } catch (\Throwable $e) {
+                    Log::warning('Original file upload to Supabase failed', [
+                        'exception'    => $e->getMessage(),
+                        'storage_path' => $originalStoragePath,
+                    ]);
+                }
+
                 $outputPath = $this->service->translateDocument(
-                    $request->file('document'),
+                    $uploadedFile,
                     $sourceLang,
                     $targetLang,
                     $pdfColumnMode
@@ -87,20 +108,22 @@ class TranslationController extends Controller
                 @unlink($outputPath);
 
                 $downloadFilename = $this->service->getOriginalOutputName(
-                    $request->file('document')->getClientOriginalName(),
-                    strtolower('.' . $request->file('document')->getClientOriginalExtension())
+                    $originalClientName,
+                    strtolower('.' . $uploadedFile->getClientOriginalExtension())
                 );
 
                 try {
                     $this->history->insertRecord([
-                        'user_id'               => Auth::id(),
-                        'original_filename'     => $request->file('document')->getClientOriginalName(),
-                        'translated_filename'   => $downloadFilename,
-                        'source_language'       => $sourceLang,
-                        'target_language'       => $targetLang,
-                        'created_at'            => now()->toIso8601String(),
-                        'storage_path'          => $storagePath,
-                        'signed_url_expires_at' => $storageResult['signed_url_expires_at'],
+                        'user_id'                        => Auth::id(),
+                        'original_filename'              => $originalClientName,
+                        'translated_filename'            => $downloadFilename,
+                        'source_language'                => $sourceLang,
+                        'target_language'                => $targetLang,
+                        'created_at'                     => now()->toIso8601String(),
+                        'storage_path'                   => $storagePath,
+                        'signed_url_expires_at'          => $storageResult['signed_url_expires_at'],
+                        'original_storage_path'          => $originalStorageResult['storage_path'] ?? null,
+                        'original_signed_url_expires_at' => $originalStorageResult['signed_url_expires_at'] ?? null,
                     ]);
                 } catch (\Throwable $e) {
                     Log::error('Failed to insert translation history record', [

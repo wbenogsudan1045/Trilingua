@@ -324,28 +324,39 @@
         }
     }
 
-    // Apply sort: reorder cards within each group (or across all if no grouping)
+    // Apply sort: reorder all cards globally across all groups
     function applySort(order) {
-        getAllGroups().forEach(function (group) {
-            var grid  = group.querySelector('.history-cards');
-            if (!grid) return;
-            var cards = Array.from(grid.querySelectorAll('.history-card'));
+        var allCards = Array.from(contentEl.querySelectorAll('.history-card'));
 
-            cards.sort(function (a, b) {
-                if (order === 'newest' || order === 'oldest') {
-                    var da = new Date(a.getAttribute('data-date') || 0);
-                    var db = new Date(b.getAttribute('data-date') || 0);
-                    return order === 'newest' ? db - da : da - db;
-                } else if (order === 'lang-az') {
-                    var la = (a.getAttribute('data-lang') || '').toLowerCase();
-                    var lb = (b.getAttribute('data-lang') || '').toLowerCase();
-                    return la < lb ? -1 : la > lb ? 1 : 0;
-                }
-                return 0;
-            });
-
-            cards.forEach(function (card) { grid.appendChild(card); });
+        allCards.sort(function (a, b) {
+            if (order === 'newest' || order === 'oldest') {
+                var da = new Date(a.getAttribute('data-date') || 0);
+                var db = new Date(b.getAttribute('data-date') || 0);
+                return order === 'newest' ? db - da : da - db;
+            }
+            if (order === 'lang-az') {
+                var la = (a.getAttribute('data-lang') || '').toLowerCase();
+                var lb = (b.getAttribute('data-lang') || '').toLowerCase();
+                return la < lb ? -1 : la > lb ? 1 : 0;
+            }
+            return 0;
         });
+
+        // Re-insert in sorted order; each card's parentNode is its .history-cards grid
+        allCards.forEach(function (card) {
+            card.parentNode.appendChild(card);
+        });
+
+        // For lang-az, also reorder the group sections themselves
+        if (order === 'lang-az') {
+            var groups = Array.from(contentEl.querySelectorAll('.history-group'));
+            groups.sort(function (a, b) {
+                var la = (a.getAttribute('data-lang-pair') || '').toLowerCase();
+                var lb = (b.getAttribute('data-lang-pair') || '').toLowerCase();
+                return la < lb ? -1 : la > lb ? 1 : 0;
+            });
+            groups.forEach(function (g) { contentEl.appendChild(g); });
+        }
     }
 
     function applyAll() {
@@ -358,8 +369,8 @@
     if (groupSelect) groupSelect.addEventListener('change', applyAll);
     if (sortSelect)  sortSelect.addEventListener('change', applyAll);
 
-    // Initial sort (newest first by default)
-    applyAll();
+    // Initial sort (newest first by default) — deferred to ensure DOM is fully settled
+    requestAnimationFrame(function () { applyAll(); });
 
 })();
 </script>

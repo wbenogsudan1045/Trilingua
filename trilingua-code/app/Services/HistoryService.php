@@ -30,17 +30,19 @@ class HistoryService
 
         // Build payload — only include keys that are present
         $payload = array_filter([
-            'user_id'               => $data['user_id'] ?? null,
-            'translation_type'      => $data['translation_type'] ?? 'document',
-            'original_filename'     => $data['original_filename'] ?? null,
-            'translated_filename'   => $data['translated_filename'] ?? null,
-            'source_language'       => $data['source_language'] ?? null,
-            'target_language'       => $data['target_language'] ?? null,
-            'created_at'            => $data['created_at'] ?? null,
-            'storage_path'          => $data['storage_path'] ?? null,
-            'signed_url_expires_at' => $data['signed_url_expires_at'] ?? null,
-            'source_text'           => $data['source_text'] ?? null,
-            'translated_text'       => $data['translated_text'] ?? null,
+            'user_id'                        => $data['user_id'] ?? null,
+            'translation_type'               => $data['translation_type'] ?? 'document',
+            'original_filename'              => $data['original_filename'] ?? null,
+            'translated_filename'            => $data['translated_filename'] ?? null,
+            'source_language'                => $data['source_language'] ?? null,
+            'target_language'                => $data['target_language'] ?? null,
+            'created_at'                     => $data['created_at'] ?? null,
+            'storage_path'                   => $data['storage_path'] ?? null,
+            'signed_url_expires_at'          => $data['signed_url_expires_at'] ?? null,
+            'original_storage_path'          => $data['original_storage_path'] ?? null,
+            'original_signed_url_expires_at' => $data['original_signed_url_expires_at'] ?? null,
+            'source_text'                    => $data['source_text'] ?? null,
+            'translated_text'                => $data['translated_text'] ?? null,
         ], fn($v) => $v !== null);
 
         try {
@@ -92,7 +94,7 @@ class HistoryService
                     'user_id' => "eq.{$userId}",
                     'order'   => 'created_at.desc',
                     'limit'   => '200',
-                    'select'  => 'id,user_id,translation_type,original_filename,translated_filename,source_language,target_language,created_at,storage_path,signed_url_expires_at,source_text,translated_text',
+                    'select'  => 'id,user_id,translation_type,original_filename,translated_filename,source_language,target_language,created_at,storage_path,signed_url_expires_at,original_storage_path,original_signed_url_expires_at,source_text,translated_text',
                 ],
             ]);
         } catch (ConnectException $e) {
